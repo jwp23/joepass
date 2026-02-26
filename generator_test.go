@@ -35,3 +35,54 @@ func TestBuildPool_Defaults(t *testing.T) {
 		t.Error("pool missing default special characters")
 	}
 }
+
+func TestBuildPool_NoUpper(t *testing.T) {
+	opts := Options{NoUpper: true}
+	pool := buildPool(opts)
+	for _, c := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+		if strings.ContainsRune(pool, c) {
+			t.Errorf("pool should not contain uppercase %c", c)
+		}
+	}
+}
+
+func TestBuildPool_NoDigits(t *testing.T) {
+	opts := Options{NoDigits: true}
+	pool := buildPool(opts)
+	for _, c := range "0123456789" {
+		if strings.ContainsRune(pool, c) {
+			t.Errorf("pool should not contain digit %c", c)
+		}
+	}
+}
+
+func TestBuildPool_NoSpecial(t *testing.T) {
+	opts := Options{NoSpecial: true}
+	pool := buildPool(opts)
+	for _, c := range defaultSpecial {
+		if strings.ContainsRune(pool, c) {
+			t.Errorf("pool should not contain special %c", c)
+		}
+	}
+}
+
+func TestBuildPool_CustomSpecial(t *testing.T) {
+	opts := Options{Special: "!@#"}
+	pool := buildPool(opts)
+	if !strings.ContainsRune(pool, '!') {
+		t.Error("pool missing custom special !")
+	}
+	if strings.ContainsRune(pool, '^') {
+		t.Error("pool should not contain ^ when custom special is set")
+	}
+}
+
+func TestBuildPool_NoAmbiguous(t *testing.T) {
+	opts := Options{NoAmbiguous: true}
+	pool := buildPool(opts)
+	for _, c := range ambiguousChars {
+		if strings.ContainsRune(pool, c) {
+			t.Errorf("pool should not contain ambiguous char %c", c)
+		}
+	}
+}
