@@ -1,5 +1,11 @@
 package main
 
+import (
+	"crypto/rand"
+	"fmt"
+	"math/big"
+)
+
 const (
 	lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
 	uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -52,4 +58,27 @@ func buildPool(opts Options) string {
 	}
 
 	return pool
+}
+
+func Generate(opts Options) (string, error) {
+	pool := buildPool(opts)
+	if len(pool) == 0 {
+		return "", fmt.Errorf("no characters available: all character types are disabled")
+	}
+	if opts.Length <= 0 {
+		return "", fmt.Errorf("invalid length: %d", opts.Length)
+	}
+
+	result := make([]byte, opts.Length)
+	poolLen := big.NewInt(int64(len(pool)))
+
+	for i := 0; i < opts.Length; i++ {
+		n, err := rand.Int(rand.Reader, poolLen)
+		if err != nil {
+			return "", fmt.Errorf("failed to generate random number: %w", err)
+		}
+		result[i] = pool[n.Int64()]
+	}
+
+	return string(result), nil
 }

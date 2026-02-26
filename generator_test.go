@@ -86,3 +86,38 @@ func TestBuildPool_NoAmbiguous(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerate_DefaultLength(t *testing.T) {
+	opts := Options{Length: 20}
+	pw, err := Generate(opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(pw) != 20 {
+		t.Errorf("expected length 20, got %d", len(pw))
+	}
+}
+
+func TestGenerate_CustomLength(t *testing.T) {
+	opts := Options{Length: 32}
+	pw, err := Generate(opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(pw) != 32 {
+		t.Errorf("expected length 32, got %d", len(pw))
+	}
+}
+
+func TestGenerate_OnlyUsesPoolChars(t *testing.T) {
+	opts := Options{Length: 100, NoUpper: true, NoDigits: true, NoSpecial: true}
+	pw, err := Generate(opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, c := range pw {
+		if c < 'a' || c > 'z' {
+			t.Errorf("password contains non-lowercase char: %c", c)
+		}
+	}
+}
