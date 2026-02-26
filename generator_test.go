@@ -121,3 +121,21 @@ func TestGenerate_OnlyUsesPoolChars(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerate_EmptyPool(t *testing.T) {
+	// Lowercase is always included by buildPool, so we need to test
+	// the error path by testing Generate with length 0 instead.
+	opts := Options{Length: 0}
+	_, err := Generate(opts)
+	if err == nil {
+		t.Error("expected error for length 0")
+	}
+}
+
+func TestGenerate_NegativeLength(t *testing.T) {
+	opts := Options{Length: -5}
+	_, err := Generate(opts)
+	if err == nil {
+		t.Error("expected error for negative length")
+	}
+}
