@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
+	"strings"
 )
 
 const (
@@ -33,25 +34,18 @@ func buildPool(opts Options) string {
 		pool += digitChars
 	}
 	if !opts.NoSpecial {
+		special := defaultSpecial
 		if opts.Special != "" {
-			pool += opts.Special
-		} else {
-			pool += defaultSpecial
+			special = opts.Special
 		}
+		pool += special
 	}
 
 	if opts.NoAmbiguous {
 		var filtered []byte
-		for i := 0; i < len(pool); i++ {
-			ambiguous := false
-			for j := 0; j < len(ambiguousChars); j++ {
-				if pool[i] == ambiguousChars[j] {
-					ambiguous = true
-					break
-				}
-			}
-			if !ambiguous {
-				filtered = append(filtered, pool[i])
+		for _, c := range pool {
+			if !strings.ContainsRune(ambiguousChars, c) {
+				filtered = append(filtered, byte(c))
 			}
 		}
 		pool = string(filtered)
@@ -72,7 +66,7 @@ func Generate(opts Options) (string, error) {
 	result := make([]byte, opts.Length)
 	poolLen := big.NewInt(int64(len(pool)))
 
-	for i := 0; i < opts.Length; i++ {
+	for i := range opts.Length {
 		n, err := rand.Int(rand.Reader, poolLen)
 		if err != nil {
 			return "", fmt.Errorf("failed to generate random number: %w", err)
