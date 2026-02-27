@@ -32,5 +32,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(pw)
+	if err := CopyToClipboard(pw); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Fprintln(os.Stderr, "Make it so! Password go!")
 }
