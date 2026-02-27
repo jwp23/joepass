@@ -3,3 +3,4 @@ joepass
 
 # Test coverage
 *.out
+coverage.html
