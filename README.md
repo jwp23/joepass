@@ -18,18 +18,18 @@ joepass
 joepass | pbcopy
 
 # Custom length
-joepass -length 32
+joepass --length 32
 
 # Specify allowed special characters
-joepass -special '!@#$%'
+joepass --special '!@#$%'
 
 # Exclude character types
-joepass -no-upper
-joepass -no-digits
-joepass -no-special
+joepass --no-upper
+joepass --no-digits
+joepass --no-special
 
 # Exclude ambiguous characters (0, O, I, l, 1)
-joepass -no-ambiguous
+joepass --no-ambiguous
 ```
 
 ## Defaults
