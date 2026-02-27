@@ -1,35 +1,35 @@
-# passgen
+# joepass
 
 A CLI tool for generating random passwords.
 
 ## Install
 
 ```bash
-go install github.com/jwp23/password-generator-cli@latest
+go install github.com/jwp23/joepass@latest
 ```
 
 ## Usage
 
 ```bash
 # Generate a 20-character password (default)
-passgen
+joepass
 
 # Copy to clipboard (macOS)
-passgen | pbcopy
+joepass | pbcopy
 
 # Custom length
-passgen -length 32
+joepass -length 32
 
 # Specify allowed special characters
-passgen -special '!@#$%'
+joepass -special '!@#$%'
 
 # Exclude character types
-passgen -no-upper
-passgen -no-digits
-passgen -no-special
+joepass -no-upper
+joepass -no-digits
+joepass -no-special
 
 # Exclude ambiguous characters (0, O, I, l, 1)
-passgen -no-ambiguous
+joepass -no-ambiguous
 ```
 
 ## Defaults
