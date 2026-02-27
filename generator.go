@@ -24,38 +24,42 @@ type Options struct {
 	NoAmbiguous bool
 }
 
-func buildPool(opts Options) string {
-	pool := lowercaseChars
+func buildCharacterPool(opts Options) string {
+	chars := lowercaseChars
 
 	if !opts.NoUpper {
-		pool += uppercaseChars
+		chars += uppercaseChars
 	}
 	if !opts.NoDigits {
-		pool += digitChars
+		chars += digitChars
 	}
 	if !opts.NoSpecial {
 		special := defaultSpecial
 		if opts.Special != "" {
 			special = opts.Special
 		}
-		pool += special
+		chars += special
 	}
 
 	if opts.NoAmbiguous {
-		var filtered []byte
-		for _, c := range pool {
-			if !strings.ContainsRune(ambiguousChars, c) {
-				filtered = append(filtered, byte(c))
-			}
-		}
-		pool = string(filtered)
+		chars = removeAmbiguous(chars)
 	}
 
-	return pool
+	return chars
+}
+
+func removeAmbiguous(chars string) string {
+	var filtered []byte
+	for _, c := range chars {
+		if !strings.ContainsRune(ambiguousChars, c) {
+			filtered = append(filtered, byte(c))
+		}
+	}
+	return string(filtered)
 }
 
 func Generate(opts Options) (string, error) {
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 	if len(pool) == 0 {
 		return "", fmt.Errorf("no characters available: all character types are disabled")
 	}

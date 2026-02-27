@@ -14,7 +14,7 @@ func TestBuildPool_Defaults(t *testing.T) {
 		Special:     "",
 		NoAmbiguous: false,
 	}
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 
 	for _, c := range "abcxyz" {
 		if !strings.ContainsRune(pool, c) {
@@ -38,7 +38,7 @@ func TestBuildPool_Defaults(t *testing.T) {
 
 func TestBuildPool_NoUpper(t *testing.T) {
 	opts := Options{NoUpper: true}
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 	for _, c := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
 		if strings.ContainsRune(pool, c) {
 			t.Errorf("pool should not contain uppercase %c", c)
@@ -48,7 +48,7 @@ func TestBuildPool_NoUpper(t *testing.T) {
 
 func TestBuildPool_NoDigits(t *testing.T) {
 	opts := Options{NoDigits: true}
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 	for _, c := range "0123456789" {
 		if strings.ContainsRune(pool, c) {
 			t.Errorf("pool should not contain digit %c", c)
@@ -58,7 +58,7 @@ func TestBuildPool_NoDigits(t *testing.T) {
 
 func TestBuildPool_NoSpecial(t *testing.T) {
 	opts := Options{NoSpecial: true}
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 	for _, c := range defaultSpecial {
 		if strings.ContainsRune(pool, c) {
 			t.Errorf("pool should not contain special %c", c)
@@ -68,7 +68,7 @@ func TestBuildPool_NoSpecial(t *testing.T) {
 
 func TestBuildPool_CustomSpecial(t *testing.T) {
 	opts := Options{Special: "!@#"}
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 	if !strings.ContainsRune(pool, '!') {
 		t.Error("pool missing custom special !")
 	}
@@ -79,7 +79,7 @@ func TestBuildPool_CustomSpecial(t *testing.T) {
 
 func TestBuildPool_NoAmbiguous(t *testing.T) {
 	opts := Options{NoAmbiguous: true}
-	pool := buildPool(opts)
+	pool := buildCharacterPool(opts)
 	for _, c := range ambiguousChars {
 		if strings.ContainsRune(pool, c) {
 			t.Errorf("pool should not contain ambiguous char %c", c)
@@ -123,7 +123,7 @@ func TestGenerate_OnlyUsesPoolChars(t *testing.T) {
 }
 
 func TestGenerate_EmptyPool(t *testing.T) {
-	// Lowercase is always included by buildPool, so we need to test
+	// Lowercase is always included by buildCharacterPool, so we need to test
 	// the error path by testing Generate with length 0 instead.
 	opts := Options{Length: 0}
 	_, err := Generate(opts)
