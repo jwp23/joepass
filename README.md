@@ -11,11 +11,8 @@ go install github.com/jwp23/joepass@latest
 ## Usage
 
 ```bash
-# Generate a 20-character password (default)
+# Generate a 20-character password (copied to clipboard)
 joepass
-
-# Copy to clipboard (macOS)
-joepass | pbcopy
 
 # Custom length
 joepass --length 32
