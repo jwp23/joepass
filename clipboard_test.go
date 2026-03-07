@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCopyToClipboard_Success(t *testing.T) {
+func TestCopyToClipboardSuccess(t *testing.T) {
 	// Skip if no clipboard tool is available (e.g., CI)
 	candidates := []string{"pbcopy", "wl-copy", "xclip", "xsel"}
 	found := false
@@ -19,17 +19,17 @@ func TestCopyToClipboard_Success(t *testing.T) {
 		t.Skip("no clipboard tool available")
 	}
 
-	err := CopyToClipboard("test-password-123")
+	err := copyToClipboard("test-password-123")
 	if err != nil {
-		t.Fatalf("CopyToClipboard failed: %v", err)
+		t.Fatalf("copyToClipboard failed: %v", err)
 	}
 }
 
-func TestCopyToClipboard_NoTool(t *testing.T) {
+func TestCopyToClipboardNoTool(t *testing.T) {
 	// Save original PATH and set to empty to simulate no tools
 	t.Setenv("PATH", "")
 
-	err := CopyToClipboard("test-password")
+	err := copyToClipboard("test-password")
 	if err == nil {
 		t.Fatal("expected error when no clipboard tool is available")
 	}
