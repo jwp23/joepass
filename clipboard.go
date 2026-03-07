@@ -18,7 +18,7 @@ var clipboardCandidates = []clipboardCmd{
 	{bin: "xsel", args: []string{"--clipboard", "--input"}},
 }
 
-func CopyToClipboard(text string) error {
+func copyToClipboard(text string) error {
 	for _, c := range clipboardCandidates {
 		path, err := exec.LookPath(c.bin)
 		if err != nil {

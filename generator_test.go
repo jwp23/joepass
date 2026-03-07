@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestBuildPool_Defaults(t *testing.T) {
-	opts := Options{
+func TestBuildPoolDefaults(t *testing.T) {
+	opts := options{
 		Length:      20,
 		NoUpper:     false,
 		NoDigits:    false,
@@ -26,7 +26,7 @@ func TestBuildPool_Defaults(t *testing.T) {
 			t.Errorf("pool missing uppercase %c", c)
 		}
 	}
-	for _, c := range "0123456789" {
+	for _, c := range digitChars {
 		if !strings.ContainsRune(pool, c) {
 			t.Errorf("pool missing digit %c", c)
 		}
@@ -36,28 +36,28 @@ func TestBuildPool_Defaults(t *testing.T) {
 	}
 }
 
-func TestBuildPool_NoUpper(t *testing.T) {
-	opts := Options{NoUpper: true}
+func TestBuildPoolNoUpper(t *testing.T) {
+	opts := options{NoUpper: true}
 	pool := buildCharacterPool(opts)
-	for _, c := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+	for _, c := range uppercaseChars {
 		if strings.ContainsRune(pool, c) {
 			t.Errorf("pool should not contain uppercase %c", c)
 		}
 	}
 }
 
-func TestBuildPool_NoDigits(t *testing.T) {
-	opts := Options{NoDigits: true}
+func TestBuildPoolNoDigits(t *testing.T) {
+	opts := options{NoDigits: true}
 	pool := buildCharacterPool(opts)
-	for _, c := range "0123456789" {
+	for _, c := range digitChars {
 		if strings.ContainsRune(pool, c) {
 			t.Errorf("pool should not contain digit %c", c)
 		}
 	}
 }
 
-func TestBuildPool_NoSpecial(t *testing.T) {
-	opts := Options{NoSpecial: true}
+func TestBuildPoolNoSpecial(t *testing.T) {
+	opts := options{NoSpecial: true}
 	pool := buildCharacterPool(opts)
 	for _, c := range defaultSpecial {
 		if strings.ContainsRune(pool, c) {
@@ -66,8 +66,8 @@ func TestBuildPool_NoSpecial(t *testing.T) {
 	}
 }
 
-func TestBuildPool_CustomSpecial(t *testing.T) {
-	opts := Options{Special: "!@#"}
+func TestBuildPoolCustomSpecial(t *testing.T) {
+	opts := options{Special: "!@#"}
 	pool := buildCharacterPool(opts)
 	if !strings.ContainsRune(pool, '!') {
 		t.Error("pool missing custom special !")
@@ -77,8 +77,8 @@ func TestBuildPool_CustomSpecial(t *testing.T) {
 	}
 }
 
-func TestBuildPool_NoAmbiguous(t *testing.T) {
-	opts := Options{NoAmbiguous: true}
+func TestBuildPoolNoAmbiguous(t *testing.T) {
+	opts := options{NoAmbiguous: true}
 	pool := buildCharacterPool(opts)
 	for _, c := range ambiguousChars {
 		if strings.ContainsRune(pool, c) {
@@ -87,9 +87,9 @@ func TestBuildPool_NoAmbiguous(t *testing.T) {
 	}
 }
 
-func TestGenerate_DefaultLength(t *testing.T) {
-	opts := Options{Length: 20}
-	pw, err := Generate(opts)
+func TestGenerateDefaultLength(t *testing.T) {
+	opts := options{Length: 20}
+	pw, err := generate(opts)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -98,9 +98,9 @@ func TestGenerate_DefaultLength(t *testing.T) {
 	}
 }
 
-func TestGenerate_CustomLength(t *testing.T) {
-	opts := Options{Length: 32}
-	pw, err := Generate(opts)
+func TestGenerateCustomLength(t *testing.T) {
+	opts := options{Length: 32}
+	pw, err := generate(opts)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -109,9 +109,9 @@ func TestGenerate_CustomLength(t *testing.T) {
 	}
 }
 
-func TestGenerate_OnlyUsesPoolChars(t *testing.T) {
-	opts := Options{Length: 100, NoUpper: true, NoDigits: true, NoSpecial: true}
-	pw, err := Generate(opts)
+func TestGenerateOnlyUsesPoolChars(t *testing.T) {
+	opts := options{Length: 100, NoUpper: true, NoDigits: true, NoSpecial: true}
+	pw, err := generate(opts)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -122,19 +122,19 @@ func TestGenerate_OnlyUsesPoolChars(t *testing.T) {
 	}
 }
 
-func TestGenerate_EmptyPool(t *testing.T) {
+func TestGenerateEmptyPool(t *testing.T) {
 	// Lowercase is always included by buildCharacterPool, so we need to test
-	// the error path by testing Generate with length 0 instead.
-	opts := Options{Length: 0}
-	_, err := Generate(opts)
+	// the error path by testing generate with length 0 instead.
+	opts := options{Length: 0}
+	_, err := generate(opts)
 	if err == nil {
 		t.Error("expected error for length 0")
 	}
 }
 
-func TestGenerate_NegativeLength(t *testing.T) {
-	opts := Options{Length: -5}
-	_, err := Generate(opts)
+func TestGenerateNegativeLength(t *testing.T) {
+	opts := options{Length: -5}
+	_, err := generate(opts)
 	if err == nil {
 		t.Error("expected error for negative length")
 	}

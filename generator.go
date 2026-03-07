@@ -15,7 +15,7 @@ const (
 	ambiguousChars = "0OIl1"
 )
 
-type Options struct {
+type options struct {
 	Length      int
 	NoUpper     bool
 	NoDigits    bool
@@ -24,7 +24,7 @@ type Options struct {
 	NoAmbiguous bool
 }
 
-func buildCharacterPool(opts Options) string {
+func buildCharacterPool(opts options) string {
 	chars := lowercaseChars
 
 	if !opts.NoUpper {
@@ -58,7 +58,7 @@ func removeAmbiguous(chars string) string {
 	return string(filtered)
 }
 
-func Generate(opts Options) (string, error) {
+func generate(opts options) (string, error) {
 	pool := buildCharacterPool(opts)
 	if len(pool) == 0 {
 		return "", fmt.Errorf("no characters available: all character types are disabled")

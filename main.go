@@ -17,7 +17,7 @@ func main() {
 
 	flag.Parse()
 
-	opts := Options{
+	opts := options{
 		Length:      *length,
 		NoUpper:     *noUpper,
 		NoDigits:    *noDigits,
@@ -26,13 +26,13 @@ func main() {
 		NoAmbiguous: *noAmbiguous,
 	}
 
-	pw, err := Generate(opts)
+	pw, err := generate(opts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
-	if err := CopyToClipboard(pw); err != nil {
+	if err := copyToClipboard(pw); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
