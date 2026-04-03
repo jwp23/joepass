@@ -17,7 +17,7 @@ joepass
 # Custom length
 joepass --length 32
 
-# Specify allowed special characters
+# Specify allowed special characters (spaces are ignored)
 joepass --special '!@#$%'
 
 # Exclude character types

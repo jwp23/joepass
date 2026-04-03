@@ -77,6 +77,17 @@ func TestBuildPoolCustomSpecial(t *testing.T) {
 	}
 }
 
+func TestBuildPoolCustomSpecialExcludesSpaces(t *testing.T) {
+	opts := options{Special: "! @ #"}
+	pool := buildCharacterPool(opts)
+	if strings.ContainsRune(pool, ' ') {
+		t.Error("pool should not contain spaces")
+	}
+	if !strings.ContainsRune(pool, '!') || !strings.ContainsRune(pool, '@') || !strings.ContainsRune(pool, '#') {
+		t.Error("pool should still contain the non-space special characters")
+	}
+}
+
 func TestBuildPoolNoAmbiguous(t *testing.T) {
 	opts := options{NoAmbiguous: true}
 	pool := buildCharacterPool(opts)

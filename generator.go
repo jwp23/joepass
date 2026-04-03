@@ -36,7 +36,7 @@ func buildCharacterPool(opts options) string {
 	if !opts.NoSpecial {
 		special := defaultSpecial
 		if opts.Special != "" {
-			special = opts.Special
+			special = strings.ReplaceAll(opts.Special, " ", "")
 		}
 		chars += special
 	}
