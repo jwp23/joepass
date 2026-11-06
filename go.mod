@@ -2,4 +2,4 @@ module github.com/jwp23/joepass
 
 go 1.25.0
 
-require github.com/spf13/pflag v1.0.10
+require github.com/spf13/pflag v1.1.0
